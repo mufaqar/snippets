@@ -1,0 +1,110 @@
+<?php 
+
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+		$query_user = $dbCon->prepare('SELECT `id` FROM order_buy  WHERE  `invoice_id` = ?');
+		$query_user->bind_param('s', $invoice_id);
+		$query_user->execute();
+		$result_user = $query_user->get_result();		
+		
+		
+	while ($row = $result_user->fetch_assoc()) 
+		
+		{}
+		
+		
+		
+		//
+		
+		
+		$stmt = $mysqli->prepare("INSERT INTO some_names (firstName, lastName) VALUES (?, ?)");
+		$stmt->bind_param('ss', $firstName, $lastName);
+		
+		
+		include_once('gump.class.php');	
+		$gump = new GUMP();
+		$_POST = $gump->sanitize($_POST);		
+		$gump->validation_rules(array(
+			'first_name'  => 'required|alpha_numeric|max_len,100|min_len,3',
+			'last_name'    => 'required|alpha_numeric|max_len,100|min_len,3',
+			'phone'       => 'required|alpha_numeric|max_len,100|min_len,3',
+			'city'         => 'required|alpha_numeric|max_len,100|min_len,3',
+			'state'     => 'required|alpha_numeric|max_len,100|min_len,3',
+			'zip'     => 'required|alpha_numeric|max_len,100|min_len,3',
+			'address'     => 'required|alpha_numeric'
+		));
+		
+		$gump->filter_rules(array(
+			'first_name' => 'trim|sanitize_string',
+			'last_name' => 'trim|sanitize_string',
+			'phone' => 'trim|sanitize_string',
+			'city' => 'trim|sanitize_string',
+			'state' => 'trim|sanitize_string',
+			'zip' => 'trim|sanitize_string',
+			'address' => 'trim|sanitize_string',
+			
+		));
+		
+		$validated_data = $gump->run($_POST);
+		
+		if($validated_data === false) {
+			
+			?>
+			<script>
+    $( document ).ready(function() {
+      $(".fail").show();
+	  		//parent.history.back();
+    });  
+    </script>  
+	<div class="fail"><?php echo $gump->get_readable_errors(true); ?></div> 
+			
+			<?php
+			
+			
+			//echo "false";
+		} else {
+			
+			
+			$update_profile_query =  mysql_query("UPDATE `user` SET `firstname`='$first_name',`lastname`='$last_name' ,`phone`='$phone',`city`='$city',`state`='$state',`zip`='$zip',`address`='$address' WHERE `username` = '$username'");
+	
+
+				
+				
+				if($update_profile_query)
+					{
+					?> <script>
+    $( document ).ready(function() {
+     $(".success").show().delay(5000).fadeOut();
+    });  
+    </script>  
+    
+    <div class="success"> Your Profile Updated succesfully .
+    
+    </div> 
+    
+	
+	
+	
+	<?php
+					}
+					
+		}
+		
+		
+		
+		if($validated_data === false) {
+			
+		echo "False";
+			
+		} else {
+			
+		
+			echo "true";
+			
+					
+		}
+	
