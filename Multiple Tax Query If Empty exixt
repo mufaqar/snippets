@@ -1,0 +1,46 @@
+ 
+   $meta_query = array();
+   
+  
+
+    // add meta_query elements
+    if( !empty( $property_types ) ){
+        $meta_query[] = array( 'taxonomy' => 'types','field' => 'slug','terms' => $property_types );
+    }
+	
+	// add meta_query elements
+    if( !empty( $property_project ) ){
+        $meta_query[] = array( 'taxonomy' => 'projects','field' => 'slug','terms' => $property_project );
+    }
+	
+	
+	// add meta_query elements
+    if( !empty( $property_location ) ){
+        $meta_query[] = array( 'taxonomy' => 'location','field' => 'slug','terms' => $property_location );
+    }
+	
+	// add meta_query elements
+    if( !empty( $min_bedroom ) ){
+        $meta_query[] = array( 'taxonomy' => 'min_bed_rooms','field' => 'slug','terms' => $min_bedroom );
+    }
+	
+	// add meta_query elements
+    if( !empty( $max_bedroom ) ){
+        $meta_query[] = array( 'taxonomy' => 'max_bed_rooms','field' => 'slug','terms' => $max_bedroom );
+    }
+	
+	if( count( $meta_query ) > 1 ){
+        $meta_query['relation'] = 'AND';
+    }
+	
+	
+    query_posts(array(
+            'post_type' => 'listing',
+            'posts_per_page' => -1,
+			'order' => 'desc',
+			'tax_query' => array(
+			
+			$meta_query
+			
+								
+		  )
