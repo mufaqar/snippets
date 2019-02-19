@@ -1,0 +1,32 @@
+
+
+
+add_filter('manage_users_columns', 'pippin_add_user_id_column');
+function pippin_add_user_id_column($columns) {
+    $columns['user_sales'] = 'Sales';
+    return $columns;
+}
+
+add_action('manage_users_custom_column',  'pippin_show_user_id_column_content', 10, 3);
+function pippin_show_user_id_column_content($value, $column_name, $user_id) {
+	
+	
+	$customer_user_id = $user_id; // current user ID here for example
+
+// Getting current customer orders
+$customer_orders = wc_get_orders( array(
+    'meta_key' => '_customer_user',
+    'meta_value' => $customer_user_id,
+    'post_status' => $order_statuses,
+    'numberposts' => -1
+) );
+
+
+return count( $customer_orders );
+
+
+	
+	
+	}
+
+
